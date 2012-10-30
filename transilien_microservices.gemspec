@@ -1,15 +1,15 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'transilien_microservices/version'
+require 'transilien/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "transilien_microservices"
-  gem.version       = TransilienMicroservices::VERSION
+  gem.version       = Transilien::VERSION
   gem.authors       = ["Thomas Lecavelier"]
-  gem.email         = ["tl@pierlis.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.email         = ["thomas-gems@lecavelier.name"]
+  gem.description   = %q{Implements SNCf Transilien micro-services API: enable access to their theoric offer.}
+  gem.summary       = %q{See http://test.data-sncf.com/index.php?p=transilien}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)
