@@ -12,6 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{See http://test.data-sncf.com/index.php?p=transilien}
   gem.homepage      = ""
 
+  gem.add_runtime_dependency('faraday', '>= 0.8.4')
+
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})

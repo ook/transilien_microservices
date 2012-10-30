@@ -1,4 +1,5 @@
 require 'uri'
+require 'faraday'
 
 class Transilien::MicroService
   API_HOST = 'ms.api.transilien.com'
