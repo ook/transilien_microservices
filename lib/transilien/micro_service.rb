@@ -16,7 +16,10 @@ class Transilien::MicroService
       end
     end
 
-    def find
+    # /?action=LineList&StopAreaExternalCode=DUA8754309;DUA8754513|and&RouteExternalCode=DUA8008030781013;DUA8008031050001|or
+    # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
+    def find(filters = {})
+      self.filters = filters
       self.http.get("/?action=#{action}#{params}")
     end
 
@@ -26,7 +29,17 @@ class Transilien::MicroService
 
     def params
       return '' if filters.empty?
-      @filters.map { |k,v| "#{k}=#{v}" }.join('&')
+      @filters.map do |filter, filter_value| 
+        if filter_value.is_a?(Hash)
+          operator, values = filter_value
+          ok_operators = [:and, :or]
+          raise ArgumentError("Operator #{operator} unknown. Should be one of #{ok_operators.map(&to_s).join(', ')}.") unless ok_operators.include(operator.to_sym)
+          final_values = [values].flatten.compact.join(';')
+          "#{final_values}|#{operator.to_s}"
+        else
+          "#{filter}=#{filter_value}"
+        end
+      end.join('&')
     end
 
     def filters
