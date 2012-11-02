@@ -12,7 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{See http://test.data-sncf.com/index.php?p=transilien}
   gem.homepage      = ""
 
-  gem.add_runtime_dependency('faraday', '>= 0.8.4')
+  gem.add_runtime_dependency('faraday',  '>= 0.8.4') # HTTP(S) connections
+  gem.add_runtime_dependency('nokogiri', '>= 1.5.5') # XML parsing
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

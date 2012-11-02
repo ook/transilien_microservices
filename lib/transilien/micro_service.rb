@@ -1,5 +1,6 @@
 require 'uri'
 require 'faraday'
+require 'nokogiri'
 
 class Transilien::MicroService
   API_HOST = 'ms.api.transilien.com'
@@ -20,7 +21,7 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      self.http.get("/?action=#{action}#{params}")
+      self.http.get("/?action=#{action}#{params}").body
     end
 
     def action
@@ -55,6 +56,10 @@ class Transilien::MicroService
       self.filters
     end
 
+  end
+
+  def to_s
+    super
   end
 
 
