@@ -21,7 +21,7 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      self.http.get("/?action=#{action}#{params}").body
+      self.http.get("/?action=#{action}", params).body
     end
 
     def action
@@ -30,17 +30,23 @@ class Transilien::MicroService
 
     def params
       return '' if filters.empty?
-      @filters.map do |filter, filter_value| 
+      final = {}
+      @filters.each do |filter, filter_value| 
+        final_filter = filter.to_s.split('_').map(&:capitalize).join
         if filter_value.is_a?(Hash)
           operator, values = filter_value
           ok_operators = [:and, :or]
           raise ArgumentError("Operator #{operator} unknown. Should be one of #{ok_operators.map(&to_s).join(', ')}.") unless ok_operators.include(operator.to_sym)
           final_values = [values].flatten.compact.join(';')
-          "#{final_values}|#{operator.to_s}"
+          final[final_filter] = "#{final_values}|#{operator.to_s}"
+        elsif filter_value.is_a?(Array)
+          # By default, consider OR operator when values are only an array
+          final[final_filter] = "#{filter_value.join(';')}|or"
         else
-          "#{filter}=#{filter_value}"
+          final[final_filter] = filter_value
         end
-      end.join('&')
+      end
+      final
     end
 
     def filters
@@ -61,6 +67,5 @@ class Transilien::MicroService
   def to_s
     super
   end
-
 
 end
