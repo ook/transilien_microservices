@@ -1,4 +1,4 @@
-class Transilien::RouteList < Transilien::MicroService
+class Transilien::Route < Transilien::MicroService
 
   class << self
 

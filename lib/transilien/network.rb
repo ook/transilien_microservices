@@ -1,7 +1,8 @@
-class Transilien::NetworkList < Transilien::MicroService
+class Transilien::Network < Transilien::MicroService
 
   attr_accessor :name
   attr_accessor :external_code
+  attr_accessor :access_time
 
   class << self
 
@@ -14,7 +15,6 @@ class Transilien::NetworkList < Transilien::MicroService
       networks = []
       doc = Nokogiri.XML(body)
       doc.xpath('/ActionNetworkList/NetworkList/Network').each do |node|
-        puts node.inspect
         network = new
         network.external_code = node['NetworkExternalCode']
         network.name = node['NetworkName']
@@ -26,7 +26,7 @@ class Transilien::NetworkList < Transilien::MicroService
   end
 
   def to_s
-    "#<NetworkList external_code=#{@external_code.inspect} name=#{@name.inspect} >"
+    "#<Network external_code=#{@external_code.inspect} name=#{@name.inspect} >"
   end
 
 end
