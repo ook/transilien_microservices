@@ -26,7 +26,7 @@ class Transilien::Network < Transilien::MicroService
   end
 
   def to_s
-    "#<Network external_code=#{@external_code.inspect} name=#{@name.inspect} >"
+    "#<Transilien::Network external_code=#{@external_code.inspect} name=#{@name.inspect} >"
   end
 
 end
