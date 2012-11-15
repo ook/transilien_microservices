@@ -29,16 +29,17 @@ class Transilien::MicroService
     end
 
     def params
-      return '' if filters.empty?
+      return {} if filters.empty?
       final = {}
       @filters.each do |filter, filter_value| 
         final_filter = filter.to_s.split('_').map(&:capitalize).join
         if filter_value.is_a?(Hash)
-          operator, values = filter_value
-          ok_operators = [:and, :or]
-          raise ArgumentError("Operator #{operator} unknown. Should be one of #{ok_operators.map(&to_s).join(', ')}.") unless ok_operators.include(operator.to_sym)
-          final_values = [values].flatten.compact.join(';')
-          final[final_filter] = "#{final_values}|#{operator.to_s}"
+          filter_value.each_pair do |operator, values|
+            ok_operators = [:and, :or]
+            raise ArgumentError("Operator #{operator} unknown. Should be one of #{ok_operators.map(&to_s).join(', ')}.") unless ok_operators.include?(operator.to_sym)
+            final_values = [values].flatten.compact.join(';')
+            final[final_filter] = "#{final_values}|#{operator.to_s}"
+          end
         elsif filter_value.is_a?(Array)
           # By default, consider OR operator when values are only an array
           final[final_filter] = "#{filter_value.join(';')}|or"
