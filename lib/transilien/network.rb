@@ -11,13 +11,15 @@ class Transilien::Network < Transilien::MicroService
     end
 
     def find(filters={})
-      body = super(filters)
+      response = super(filters)
+      body = response.body
       networks = []
       doc = Nokogiri.XML(body)
       doc.xpath('/ActionNetworkList/NetworkList/Network').each do |node|
         network = new
         network.external_code = node['NetworkExternalCode']
         network.name = node['NetworkName']
+        network.access_time = Time.parse(response.headers[:date])
         networks << network
       end
       networks

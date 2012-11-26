@@ -1,6 +1,7 @@
 require 'uri'
 require 'faraday'
 require 'nokogiri'
+require 'time' # Time.parse for access_time in specialized instances
 
 class Transilien::MicroService
   API_HOST = 'ms.api.transilien.com'
@@ -12,7 +13,7 @@ class Transilien::MicroService
       @http ||= Faraday.new(:url => uri) do |faraday|
         # TODO give option to setup faraday
         faraday.request  :url_encoded             # form-encode POST params
-        faraday.response :logger                  # log requests to STDOUT 
+        #faraday.response :logger                  # log requests to STDOUT 
         faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
       end
     end
@@ -21,7 +22,7 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      self.http.get("/?action=#{action}", params).body
+      self.http.get("/?action=#{action}", params)
     end
 
     def action
