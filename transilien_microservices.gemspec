@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = Transilien::VERSION
   gem.authors       = ["Thomas Lecavelier"]
   gem.email         = ["thomas-gems@lecavelier.name"]
-  gem.description   = %q{Implements SNCf Transilien micro-services API: enable access to their theoric offer.}
+  gem.description   = %q{Implements SNCF Transilien micro-services API: enable access to their theoric offer.}
   gem.summary       = %q{See http://test.data-sncf.com/index.php?p=transilien}
   gem.homepage      = ""
 
