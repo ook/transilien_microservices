@@ -3,6 +3,7 @@ class Transilien::Network < Transilien::MicroService
   attr_accessor :name
   attr_accessor :external_code
   attr_accessor :access_time
+  attr_accessor :payload
 
   class << self
 
@@ -19,6 +20,7 @@ class Transilien::Network < Transilien::MicroService
         network = new
         network.external_code = node['NetworkExternalCode']
         network.name = node['NetworkName']
+        network.payload << node
         network.access_time = Time.parse(response.headers[:date])
         networks << network
       end
