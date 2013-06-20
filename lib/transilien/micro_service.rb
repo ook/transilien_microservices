@@ -25,6 +25,20 @@ class Transilien::MicroService
       self.http.get("/?action=#{action}", params)
     end
 
+    def errors(doc)
+      @errors ||= begin 
+        @errors = []
+        doc.xpath('/Errors/Error').each do |err_node|
+          err = Transilien::MicroService::Error.new
+          err.code = err_node['code']
+          err.message = err_node.content
+          err.request = @http
+          @errors << err
+        end
+        @errors
+      end
+    end
+
     def action
       raise 'This is an abstract class. You must inherit it and override #action method.'
     end
@@ -68,6 +82,10 @@ class Transilien::MicroService
 
   def to_s
     super
+  end
+
+  class Error
+    attr_accessor :code, :message, :payload, :request
   end
 
 end
