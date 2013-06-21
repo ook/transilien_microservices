@@ -22,7 +22,7 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      self.http.get("/?action=#{action}", params)
+      self.http.get(action_param, params)
     end
 
     def errors(doc)
@@ -32,7 +32,7 @@ class Transilien::MicroService
           err = Transilien::MicroService::Error.new
           err.code = err_node['code']
           err.message = err_node.content
-          err.request = @http
+          err.request = { params: params, action: action_param}
           @errors << err
         end
         @errors
@@ -41,6 +41,10 @@ class Transilien::MicroService
 
     def action
       raise 'This is an abstract class. You must inherit it and override #action method.'
+    end
+
+    def action_param
+      "/?action=#{action}"
     end
 
     def params

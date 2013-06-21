@@ -16,11 +16,12 @@ class Transilien::Network < Transilien::MicroService
       body = response.body
       networks = []
       doc = Nokogiri.XML(body)
+      return errors(doc) unless errors(doc).empty?
       doc.xpath('/ActionNetworkList/NetworkList/Network').each do |node|
         network = new
         network.external_code = node['NetworkExternalCode']
         network.name = node['NetworkName']
-        network.payload << node
+        network.payload = node
         network.access_time = Time.parse(response.headers[:date])
         networks << network
       end
