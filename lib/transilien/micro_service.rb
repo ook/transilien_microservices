@@ -7,6 +7,11 @@ class Transilien::MicroService
   API_HOST = 'ms.api.transilien.com'
   API_URI = URI.parse("http://#{API_HOST}/")
 
+  attr_accessor :name
+  attr_accessor :external_code
+  attr_accessor :access_time
+  attr_accessor :payload
+
   class << self
 
     def http(uri = API_URI)
@@ -22,7 +27,23 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      self.http.get(action_param, params)
+      response = self.http.get(action_param, params)
+      body = response.body
+      collection = []
+      doc = Nokogiri.XML(body)
+      return errors(doc) unless errors(doc).empty?
+      doc.xpath(action_instance_xpath).each do |node|
+        item = new
+        item.payload = node
+
+        # common stuff
+        item.external_code = node["#{action_component}ExternalCode"]
+        item.name = node["#{action_component}Name"]
+        item.access_time = Time.parse(response.headers[:date])
+
+        collection << item
+      end
+      collection
     end
 
     def errors(doc)
@@ -39,12 +60,21 @@ class Transilien::MicroService
       end
     end
 
+
+    def action_component
+      self.to_s.split('::').last 
+    end
+
     def action
-      raise 'This is an abstract class. You must inherit it and override #action method.'
+      "#{action_component}List"
     end
 
     def action_param
       "/?action=#{action}"
+    end
+
+    def action_instance_xpath
+      "/Action#{action}/#{action}/#{action_component}"
     end
 
     def params
@@ -85,7 +115,7 @@ class Transilien::MicroService
   end
 
   def to_s
-    super
+    "#<#{self.class.to_s} external_code=#{@external_code.inspect} name=#{@name.inspect} >"
   end
 
   class Error
