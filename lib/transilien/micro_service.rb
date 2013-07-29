@@ -27,23 +27,31 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
+      #puts('== Request: ')
+      #puts(action_param.inspect)
+      #puts(params.inspect)
       response = self.http.get(action_param, params)
       body = response.body
       collection = []
       doc = Nokogiri.XML(body)
       return errors(doc) unless errors(doc).empty?
       doc.xpath(action_instance_xpath).each do |node|
-        item = new
-        item.payload = node
-
-        # common stuff
-        item.external_code = node["#{action_component}ExternalCode"]
-        item.name = node["#{action_component}Name"]
-        item.access_time = Time.parse(response.headers[:date])
+        item = from_node(node, Time.parse(response.headers[:date]))
 
         collection << item
       end
       collection
+    end
+
+    def from_node(node, access_time)
+      item = new
+      item.payload = node
+
+      # common stuff
+      item.external_code = node["#{action_component}ExternalCode"]
+      item.name = node["#{action_component}Name"]
+      item.access_time = access_time
+      item
     end
 
     def errors(doc)
