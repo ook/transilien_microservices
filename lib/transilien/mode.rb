@@ -1,18 +1,5 @@
 class Transilien::Mode < Transilien::MicroService
-
-  attr_accessor :mode_type
-
-  class << self
-
-    def find(filters={})
-      modes = super(filters)
-      modes.each do |mode|
-        mode.mode_type = mode.payload['ModeTypeExternalCode']
-      end
-      modes
-    end
-
+  def mode_type
+    @mode_type ||= Transilien::ModeType.find(mode_type_external_code: payload['ModeTypeExternalCode']).try(:first)
   end
-
-
 end

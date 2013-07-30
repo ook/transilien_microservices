@@ -27,9 +27,9 @@ class Transilien::MicroService
     # -> find(:stop_area_external_code => { :and => ['DUA8754309', 'DUA8754513'] }, :route_external_code => { :or => ['DUA8008030781013', 'DUA8008031050001'] })
     def find(filters = {})
       self.filters = filters
-      #puts('== Request: ')
-      #puts(action_param.inspect)
-      #puts(params.inspect)
+      puts('== Request: ')
+      puts(action_param.inspect)
+      puts(params.inspect)
       response = self.http.get(action_param, params)
       body = response.body
       collection = []
