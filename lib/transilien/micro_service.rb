@@ -131,3 +131,12 @@ class Transilien::MicroService
   end
 
 end
+
+class Transilien::FakeMicroService < Transilien::MicroService
+
+  class << self
+    def http(dummy=nil)
+      raise "FakeMicroService: you can't request a connection a connection. Use #from_node instead"
+    end
+  end
+end
