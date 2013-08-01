@@ -29,4 +29,24 @@ class Transilien::StopArea < Transilien::MicroService
       y: payload.at('Coord').at('CoordY').content.sub(',','.').to_f
     }
   end
+
+  def modes
+    @modes ||= begin
+      modes = []
+      payload.at('ModeList').children.each do |mode|
+        modes << Transilien::ModeType.from_node(mode, access_time)
+      end
+      modes
+    end
+  end
+  alias_method :mode_types, :modes # ModeList ≠ ModeTypeList : bad naming from SNCF
+
+  def city
+    @city ||= Transilien::City.from_node(payload.at('City'), access_time)
+  end
+
+  def hangs
+    @hangs ||= payload.at('HangList').children
+  end
+
 end
