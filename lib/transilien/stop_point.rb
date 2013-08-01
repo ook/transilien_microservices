@@ -6,6 +6,7 @@ class Transilien::StopPoint < Transilien::MicroService
   def address
     payload.at('StopPointAddress')
   end
+  alias_method :stop_point_address, :address
 
   def equipment
     @equipment ||= {
@@ -27,7 +28,8 @@ class Transilien::StopPoint < Transilien::MicroService
   end
 
   def stop_area
-    @stop_area ||= Transilien::StopArea.from_node(payload.at('StopArea'), access_time)
+    #@stop_area ||= Transilien::StopArea.from_node(payload.at('StopArea'), access_time)
+    @stop_area ||= Transilien::StopArea.find(stop_area_external_code: payload.at('StopArea')['StopAreaExternalCode']).first
   end
 
   def coord
