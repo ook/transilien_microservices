@@ -6,4 +6,7 @@ gemspec
 # Dev only
 group :test do
   gem 'rspec'
+  gem 'guard'
+  gem 'pry'
+  gem 'pry-doc'
 end
