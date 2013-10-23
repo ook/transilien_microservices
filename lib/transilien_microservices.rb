@@ -11,5 +11,10 @@ require "./lib/transilien/mode.rb"
 require "./lib/transilien/company.rb"
 
 module Transilien
-  # Your code goes here...
+  def self.date(time)
+    time.strftime('%Y|%m|%d')
+  end
+  def self.time(time)
+    time.strftime('%H|%M')
+  end
 end

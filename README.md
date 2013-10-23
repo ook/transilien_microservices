@@ -38,6 +38,10 @@ If you want to find a commercial line that stops by two StopArea, say: Val d'Arg
 
     val_stlaz_lines = Transilien::Line.find(stop_area_external_code: {and: ['DUA8738400', 'DUA8738179']})
 
+Ok, but to tell the truth, I doubt that you don't bother about the way: you're going from Val to StLaz, not the inverse, so precise it:
+
+    val_to_stlaz_lines = Transilien::Line.find(destination_external_code: 'DUA8738400', stop_area_external_code: 'DUA8738179')
+
 You get an Array of Transilien::Line fullfilling your wish.
 
 Staying on that example, we'll stay with the "biggest" Line of the set: "Mantes la Jolie => Gare St Lazare via CONFLANS" DUA800854044
@@ -47,7 +51,15 @@ To get ALL the stops served by this Line:
 
 Ok, that's fun. But Transilien is all about train and departures. What are the trains going from Val d’Argenteuil to Paris Saint Lazare? Transilien::VehicleJourney is all about it
 
-    Transilien::VehicleJourney.find
+    instant = Time.new
+    start_time = Time.local(instant.year, instant.month, instant.day, 17, 30)
+    end_time = Time.local(instant.year, instant.month, instant.day, 18, 45)
+    Transilien::VehicleJourney.find stop_area_external_code: {and: ['DUA8738400', 'DUA8738179'], date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time) }
+
+Yeah! Better. You still have a problem: this give you all the journey starting between start_time and end_time on date instant, but don't give a fuck to your way.
+
+TODO prochain exemple à donner c'est: 1 récupérer une route avec 2 stoparea + checkOrder activé (quel les routes dans le sens concerné) + VehiculeJourney + datetime boudnaries pour avoir très clairement ce qui nous intéresse, et voilà le taff est fait!
+
 
 
 ## Contributing
