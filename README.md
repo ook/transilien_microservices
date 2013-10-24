@@ -58,9 +58,17 @@ Ok, that's fun. But Transilien is all about train and departures. What are the t
 
 Yeah! Better. You still have a problem: this give you all the journey starting between start_time and end_time on date instant, but don't give a fuck to your way.
 
-TODO prochain exemple à donner c'est: 1 récupérer une route avec 2 stoparea + checkOrder activé (quel les routes dans le sens concerné) + VehiculeJourney + datetime boudnaries pour avoir très clairement ce qui nous intéresse, et voilà le taff est fait!
+Ready to forget what you just learnt? Go back a little bit before this point: a Line instance always have at least two Route (one way, the other). And its finder understand a convenient param: CheckOrder. If set to 1, and 2 stops are given, Route returned will honor the given way by stops order:
 
+    routes_stlaz_val = Transilien::Route.find(stop_area_external_code: {and:['DUA8738400','DUA8738179']}, check_order: 1)
 
+Here you have only Route stoping by DUA8738400 then DUA8738179, not the inverse.
+
+Now it'll be easy to get VehicleJourney matching your needs. The same VehicleJourney will become:
+
+    Transilien::VehicleJourney.find route_external_code: {and: routes_stlaz_val, date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time) }
+
+Easier, isn't it? Now take every Stop and keep only your matching StopArea: you'll get your hours of departures and arrivals :)
 
 ## Contributing
 
