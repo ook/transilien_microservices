@@ -18,8 +18,6 @@ class Transilien::VehicleJourney < Transilien::MicroService
   def stops
     @stops ||= begin
       stops_node = payload.at('StopList')
-      new_stops = []
-
     end
   end
 end
