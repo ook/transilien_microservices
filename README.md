@@ -1,6 +1,12 @@
 # TransilienMicroservices
 
-TODO: Write a gem description
+Ruby implementation of SNCF Transilien Microservices.
+
+Here the original service documentation: http://test.data-sncf.com/index.php/transilien.html/api.22.22-micro-services.html
+
+These services let you know the theoric offer on Transilien service.
+
+Disclamer: The gem only intend to implements the API. I'll create a "easy" wrapper to access these data in a convenient way very soon.
 
 ## Installation
 
@@ -78,4 +84,8 @@ Easier, isn't it? Now take every Stop and keep only your matching StopArea: you'
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-NOTA: you're a beginner gem dev? This command may help you: pry -Ilib -rtransilien_microservices (you can replace pry with irb if you're not a good person…)
+NOTA: you're a beginner gem dev? This command may help you: 
+
+    pry -Ilib -rtransilien_microservices 
+
+(you can replace pry with irb if you're not a good person…)
