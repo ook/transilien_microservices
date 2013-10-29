@@ -17,7 +17,10 @@ class Transilien::VehicleJourney < Transilien::MicroService
 
   def stops
     @stops ||= begin
-      stops_node = payload.at('StopList')
+      stops_nodes = payload.at('StopList')
+      stops_nodes.children.map do |stop_node|
+        Transilien::Stop.from_node(stop_node, access_time)
+      end
     end
   end
 end

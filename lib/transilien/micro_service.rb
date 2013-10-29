@@ -99,7 +99,7 @@ class Transilien::MicroService
       @caches ||= {}
       cache_keys.each do |k|
         @caches[k] ||= {}
-        @caches[k][item.send(k).to_sym] = item
+        @caches[k][item.send(k)] = item
       end
       item
     end

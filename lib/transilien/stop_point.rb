@@ -39,21 +39,3 @@ class Transilien::StopPoint < Transilien::MicroService
     }
   end
 end
-
-class Transilien::Stop < Transilien::FakeMicroService
-  attr_accessor :stop_at_second, :arrival_at_second
-  class << self
-    def from_node(node, access_time)
-      node.children.each do |stop|
-        item = new
-        item.stop_at_second = stop.at('StopTime').try(:at, 'TotalSeconds').to_i
-        item.arrival_at_second = stop.at('ArrivalTime').try(:at, 'TotalSeconds').to_i
-        item.payload = stop
-      end
-    end
-  end
-
-  def stop_point
-    @stop_point ||= Transilien::StopPoint.from_node(payload.at('StopPoint'), access_time)
-  end
-end
