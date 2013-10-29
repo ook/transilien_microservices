@@ -10,7 +10,8 @@ Gem::Specification.new do |gem|
   gem.email         = ["thomas-gems@lecavelier.name"]
   gem.description   = %q{Implements SNCF Transilien micro-services API: enable access to their theoric offer.}
   gem.summary       = %q{See http://test.data-sncf.com/index.php?p=transilien}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/ook/transilien_microservices"
+  gem.license       = 'MIT'
 
   gem.add_runtime_dependency('faraday',  '>= 0.8.4') # HTTP(S) connections
   gem.add_runtime_dependency('nokogiri', '>= 1.5.5') # XML parsing
