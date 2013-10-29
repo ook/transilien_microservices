@@ -66,7 +66,7 @@ Here you have only Route stoping by DUA8738400 then DUA8738179, not the inverse.
 
 Now it'll be easy to get VehicleJourney matching your needs. The same VehicleJourney will become:
 
-    Transilien::VehicleJourney.find route_external_code: {and: routes_stlaz_val.map(&:external_code)}, date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time)
+    Transilien::VehicleJourney.find route_external_code: routes_stlaz_val.map(&:external_code), date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time)
 
 Easier, isn't it? Now take every Stop and keep only your matching StopArea: you'll get your hours of departures and arrivals :)
 
