@@ -2,79 +2,101 @@
 
 Ruby implementation of SNCF Transilien Microservices.
 
-Here the original service documentation: http://test.data-sncf.com/index.php/transilien.html/api.22.22-micro-services.html
+Here is the original service documentation: http://test.data-sncf.com/index.php/transilien.html/api.22.22-micro-services.html
 
-These services let you know the theoric offer on Transilien service.
+These services let you know the theoric train times on the Transilien service.
 
-Disclamer: The gem only intend to implements the API. I'll create a "easy" wrapper to access these data in a convenient way very soon.
+Disclamer: The gem only intends to implements the API. I'll create a "easy" wrapper to access these data in a convenient way very soon.
 
 ## Installation
 
-Gem developped with ruby 2.0.0, should work with ruby 1.9.3
+Gem developped with ruby 2.0.0, should work with ruby 1.9.3.
 
 Add this line to your application's Gemfile:
 
-    gem 'transilien_microservices'
+```ruby
+gem 'transilien_microservices'
+````
 
 And then execute:
 
-    $ bundle
+```sh
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install transilien_microservices
+```sh
+$ gem install transilien_microservices
+```
 
 ## Usage
 
-The best way to access data is certainly querying through StopArea: start by fetching them.
+The best way to access data is certainly querying through `StopArea`. Start by fetching them.
 
-    stop_areas = Transilien::StopArea.find
+```ruby
+stop_areas = Transilien::StopArea.find
+```
 
-Every Transilien "main" objects have the same attributes:
+Every Transilien "main" object has the same attributes:
 
-    stop_areas.first.inspect
-    => "#<Transilien::StopArea external_code=\"DUA8738221\" name=\"LA DEFENSE GRANDE ARCHE\" >"
+```ruby
+stop_areas.first.inspect
+=> "#<Transilien::StopArea external_code=\"DUA8738221\" name=\"LA DEFENSE GRANDE ARCHE\" >"
+```
 
-* "name" is a "public" name. Can't be filtered directly through Transilien API
-* "external_code" is the true "key" to use in queries.
+* `name` is a "public" name. Can't be filtered directly through Transilien API
+* `external_code` is the true "key" to use in queries.
 
-They have in bonus #payload method which return the node used to build this object.
+As a bonus method, `#payload` returns the node used to build this object.
 
-If you want to find a commercial line that stops by two StopArea, say: Val d'Argenteuil (DUA8738179) and Paris Saint Lazare (DUA8738400) you can query this way:
+If you want to find a commercial line that stops by two `StopArea`, say: Val d'Argenteuil (DUA8738179) and Paris Saint Lazare (DUA8738400) you can query them this way:
 
-    val_stlaz_lines = Transilien::Line.find(stop_area_external_code: {and: ['DUA8738400', 'DUA8738179']})
+```ruby
+val_stlaz_lines = Transilien::Line.find(stop_area_external_code: {and: ['DUA8738400', 'DUA8738179']})
+```
 
-Ok, but to tell the truth, I doubt that you don't bother about the way: you're going from Val to StLaz, not the inverse, so precise it:
+Ok, but you will probably care about the direction you're taking. You're going from Val to StLaz, not the inverse, so precise it:
 
-    val_to_stlaz_lines = Transilien::Line.find(destination_external_code: 'DUA8738400', stop_area_external_code: 'DUA8738179')
+```ruby
+val_to_stlaz_lines = Transilien::Line.find(destination_external_code: 'DUA8738400', stop_area_external_code: 'DUA8738179')
+```
 
-You get an Array of Transilien::Line fullfilling your wish.
+You get an `Array` of `Transilien::Line` that meet your wish.
 
-Staying on that example, we'll stay with the "biggest" Line of the set: "Mantes la Jolie => Gare St Lazare via CONFLANS" DUA800854044
+Staying on this example, we'll stay with the "biggest" Line of the set: "Mantes la Jolie => Gare St Lazare via CONFLANS" DUA800854044
 To get ALL the stops served by this Line:
 
-    Transilien::StopArea.find(line_external_code: 'DUA800854044')
+```ruby
+Transilien::StopArea.find(line_external_code: 'DUA800854044')
+```
 
-Ok, that's fun. But Transilien is all about train and departures. What are the trains going from Val d’Argenteuil to Paris Saint Lazare? Transilien::VehicleJourney is all about it
+Ok, that's fun. But Transilien is all about train and departures. What are the trains going from Val d’Argenteuil to Paris Saint Lazare? `Transilien::VehicleJourney` is all about it:
 
-    instant = Time.new
-    start_time = Time.local(instant.year, instant.month, instant.day, 17, 30)
-    end_time = Time.local(instant.year, instant.month, instant.day, 18, 45)
-    Transilien::VehicleJourney.find stop_area_external_code: {and: ['DUA8738400', 'DUA8738179'], date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time) }
+```ruby
+instant = Time.new
+start_time = Time.local(instant.year, instant.month, instant.day, 17, 30)
+end_time = Time.local(instant.year, instant.month, instant.day, 18, 45)
+Transilien::VehicleJourney.find stop_area_external_code: {and: ['DUA8738400', 'DUA8738179'], date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time) }
+```
 
-Yeah! Better. You still have a problem: this give you all the journey starting between start_time and end_time on date instant, but don't give a fuck to your way.
+Yeah! Better. You still have a problem: this gives you all the journeys starting between `start_time` and `end_time`, but doesnt't give a fuck about your direction.
 
-Ready to forget what you just learnt? Go back a little bit before this point: a Line instance always have at least two Route (one way, the other). And its finder understand a convenient param: CheckOrder. If set to 1, and 2 stops are given, Route returned will honor the given way by stops order:
+Ready to forget what you just learnt? Go back a little bit before this point: a `Line` instance always has at least two `Route` (one way and the other). And its finder accepts a convenient parameter: `check_order`. If set to `1` or `2` stops, `Route` returned will honor the given way by stops order:
 
-    routes_stlaz_val = Transilien::Route.find(stop_area_external_code: {and:['DUA8738400','DUA8738179']}, check_order: 1)
+```ruby
+routes_stlaz_val = Transilien::Route.find(stop_area_external_code: {and:['DUA8738400','DUA8738179']}, check_order: 1)
+```
 
-Here you have only Route stoping by DUA8738400 then DUA8738179, not the inverse.
+Here you only get `Route`s stoping by DUA8738400 then DUA8738179, not the inverse.
 
-Now it'll be easy to get VehicleJourney matching your needs. The same VehicleJourney will become:
+Now it'll be easy to get a `VehicleJourney` matching your needs. The same `VehicleJourney` will become:
 
-    Transilien::VehicleJourney.find route_external_code: routes_stlaz_val.map(&:external_code), date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time)
+```
+Transilien::VehicleJourney.find route_external_code: routes_stlaz_val.map(&:external_code), date: Transilien.date(instant), start_time: Transilien.time(start_time), end_time: Transilien.time(end_time)
+```
 
-Easier, isn't it? Now take every Stop and keep only your matching StopArea: you'll get your hours of departures and arrivals :)
+Easier, isn't it? Now take every `Stop` and keep only your matching `StopArea`: you'll get your hours of departures and arrivals :)
 
 ## Contributing
 
@@ -86,6 +108,8 @@ Easier, isn't it? Now take every Stop and keep only your matching StopArea: you'
 
 NOTA: you're a beginner gem dev? This command may help you: 
 
-    pry -Ilib -rtransilien_microservices 
+```sh
+$ pry -Ilib -rtransilien_microservices 
+```
 
-(you can replace pry with irb if you're not a good person…)
+(You can replace `pry` with `irb` if you're not that kind of person…)
