@@ -1,9 +1,5 @@
 require 'spec_helper'
 
-raw_payload = %(
-
-)
-
 describe Transilien::MicroService do
   it 'should get a set of Stop' do
     # This payload was generated from
