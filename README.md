@@ -98,6 +98,10 @@ Transilien::VehicleJourney.find route_external_code: routes_stlaz_val.map(&:exte
 
 Easier, isn't it? Now take every `Stop` and keep only your matching `StopArea`: you'll get your hours of departures and arrivals :)
 
+## Documentation
+
+You're reading it… Ok, have a look to http://rubydoc.info/gems/transilien_microservices for code documentation. Note: you'll get a better understanding of that implementations if your read API documentation, see first link.
+
 ## Contributing
 
 1. Fork it
