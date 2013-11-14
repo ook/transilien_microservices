@@ -60,10 +60,10 @@ class Transilien::MicroService
 
       self.filters = filters
       response = self.http.get(action_param, params)
-      puts('== Request: ')
-      puts(action_param.inspect)
-      puts(params.inspect)
-      puts(response.env[:url].inspect)
+      #puts('== Request: ')
+      #puts(action_param.inspect)
+      #puts(params.inspect)
+      #puts(response.env[:url].inspect)
       body = response.body
       collection = []
       doc = Nokogiri.XML(body)
