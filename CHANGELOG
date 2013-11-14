@@ -1,0 +1,10 @@
+0.0.3
+  * Bug fix: Transilien::Time#name now works
+  * New : Transilien::Time#time convert instance into ruby Time instance
+  * Try to start documentation, Yard compatible
+
+0.0.2
+  * Fix require path to ease gem usage
+
+0.0.1
+  * Initial release. Just work
