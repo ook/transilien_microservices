@@ -4,6 +4,7 @@ class Transilien::Stop < Transilien::FakeMicroService
   class << self
     def from_node(node, access_time)
       item = new
+      item.access_time = access_time
       item.payload = node
 
       stop_node = node.at('StopTime')
