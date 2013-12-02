@@ -15,4 +15,8 @@ class Transilien::Line < Transilien::MicroService
   def backward
     payload.at('Backward')
   end
+
+  def code
+    payload['LineCode']
+  end
 end
