@@ -6,7 +6,7 @@ Here is the original service documentation: http://test.data-sncf.com/index.php/
 
 These services let you know the theoric train times on the Transilien service.
 
-Disclamer: The gem only intends to implements the API. I'll create a "easy" wrapper to access these data in a convenient way very soon.
+Disclamer: The gem only intends to implements the API. If you want a « logical » way to exploits SNCF data, see EasyTransilien gem: https://github.com/ook/easy_transilien
 
 ## Installation
 
