@@ -11,6 +11,7 @@ require "transilien/vehicle_journey.rb"
 require "transilien/mode.rb"
 require "transilien/company.rb"
 require "transilien/stop.rb"
+require "transilien/route_point.rb"
 
 module Transilien
   def self.date(time)
