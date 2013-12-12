@@ -1,5 +1,8 @@
+0.0.5
+  * New: plenty of logical links to transverse object instances (ie: Transilien::Line -> #stop_areas #stop_points #routes, etc.)
+
 0.0.4
-  * New: Transilien::Line#code give the Line code well known by customers
+  * New: Transilien::Line#code give the Line code well known by customers (Ok, I admit it: I need that info for EasyTransilien T_T)
 
 0.0.3
   * Bug fix: Transilien::Time#name now works

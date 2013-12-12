@@ -49,4 +49,8 @@ class Transilien::StopArea < Transilien::MicroService
     @hangs ||= payload.at('HangList').children
   end
 
+  def stop_points
+    @stop_points ||= Transilien::StopPoint.find(stop_area_external_code: external_code)
+  end
+
 end

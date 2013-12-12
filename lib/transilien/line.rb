@@ -19,4 +19,16 @@ class Transilien::Line < Transilien::MicroService
   def code
     payload['LineCode']
   end
+
+  def stop_points
+    @stop_points ||= Transilien::StopPoint.find(line_external_code: external_code)
+  end
+
+  def stop_areas
+    @stop_areas ||= Transilien::StopArea.find(line_external_code: external_code)
+  end
+
+  def routes
+    @routes ||= Transilien::Route.find(line_external_code: external_code)
+  end
 end
