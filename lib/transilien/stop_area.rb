@@ -53,4 +53,12 @@ class Transilien::StopArea < Transilien::MicroService
     @stop_points ||= Transilien::StopPoint.find(stop_area_external_code: external_code)
   end
 
+  def lines
+    @lines ||= Transilien::Line.find(stop_area_external_code: external_code)
+  end
+
+  def codes
+    @codes ||= lines.map(&:code).reject {|c| c.length != 1}. uniq.sort
+  end
+
 end

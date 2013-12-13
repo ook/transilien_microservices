@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    transilien_microservices (0.0.4)
+    transilien_microservices (0.0.5)
       faraday (>= 0.8.4)
       nokogiri (>= 1.5.5)
 
