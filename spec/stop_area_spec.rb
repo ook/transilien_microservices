@@ -12,7 +12,7 @@ describe Transilien::StopArea do
   end
 
   it 'should have at least a line' do
-    puts @sa.lines.map { |l| l.name }.inspect
+    #puts @sa.lines.map { |l| l.name }.inspect
     (@sa.lines.length >= 1).should be_true
   end
 

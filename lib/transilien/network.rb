@@ -4,6 +4,6 @@ class Transilien::Network < Transilien::MicroService
   end
 
   def codes
-    @codes ||= lines.line_code.uniq.sort
+    @codes ||= lines.map(&:code).uniq.sort
   end
 end
