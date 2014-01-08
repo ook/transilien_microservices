@@ -58,7 +58,7 @@ class Transilien::StopArea < Transilien::MicroService
   end
 
   def codes
-    @codes ||= lines.map(&:code).reject {|c| c.length != 1}. uniq.sort
+    @codes ||= lines.map(&:code).uniq.sort
   end
 
 end
