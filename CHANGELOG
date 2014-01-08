@@ -1,3 +1,6 @@
+0.0.6
+  * Change: It no longer reject any Line due to weird CodeLine. See EasyTransilien gem for fixes of SNCF shitty data
+
 0.0.5
   * New: plenty of logical links to transverse object instances (ie: Transilien::Line -> #stop_areas #stop_points #routes, etc.)
   * New: Transilien::RoutePoint that UFO between Route and StopArea and StopPoint...
