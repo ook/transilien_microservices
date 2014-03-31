@@ -10,6 +10,12 @@ describe Transilien::Time do
     now = Time.new
     tt.time.should eql(Time.local(now.year, now.month, now.day, 14, 42))
     tt.day = 1
-    tt.time.should eql(Time.local(now.year, now.month, now.day + 1, 14, 42))
+    this_month_days_count = Date.new(now.year, now.month, -1).day
+    if now.day == this_month_days_count
+      tt.time.should eql(Time.local(now.year, now.month+1, 1, 14, 42))
+    else
+      tt.time.should eql(Time.local(now.year, now.month, now.day+1, 14, 42))
+    end
   end
+
 end

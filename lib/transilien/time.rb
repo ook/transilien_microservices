@@ -29,6 +29,9 @@ class Transilien::Time < Transilien::FakeMicroService
   # Since the current time is not known, set it to `Time.new` year, month and day
   def time
     now = Time.new
+    this_month_days_count = Date.new(now.year, now.month, -1).day
+    return  Time.local(now.year + 1, 1, 1, hour, minute) if day == 1 && now.month == 12 && now.day == this_month_days_count
+    return  Time.local(now.year, now.month + 1, 1, hour, minute) if day == 1 && this_month_days_count == now.day
     Time.local(now.year, now.month, now.day + day, hour, minute)
   end
 end
