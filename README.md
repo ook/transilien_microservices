@@ -1,5 +1,7 @@
 # TransilienMicroservices
 
+[![Build Status](https://travis-ci.org/ook/transilien_microservices.svg?branch=master)](https://travis-ci.org/ook/transilien_microservices)
+
 Ruby implementation of SNCF Transilien Microservices.
 
 Here is the original service documentation: http://test.data-sncf.com/index.php/transilien.html/api.22.22-micro-services.html
@@ -10,7 +12,7 @@ Disclamer: The gem only intends to implements the API. If you want a « logical 
 
 ## Installation
 
-Gem developped with ruby 2.0.0, should work with ruby 1.9.3.
+Gem developped for ruby 2.0.0, work with ruby 1.9.3.
 
 Add this line to your application's Gemfile:
 
