@@ -4,7 +4,7 @@ TODO: Write a gem description
 
 ## Installation
 
-Gem developped with ruby 2.0.0, should work with ruby 1.9.3
+Gem developped with ruby 2.0.0, should work with ruby 2.5.0
 
 Add this line to your application's Gemfile:
 
